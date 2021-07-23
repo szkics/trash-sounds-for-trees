@@ -57,10 +57,6 @@ def setup():
     size(600, 600)
     root = branch(width / 2, height, width / 2, height - 200)
     tree.append(root)
-    # right_branch = root.right_child()
-    # tree.append(right_branch)
-    # left_branch = root.left_child()
-    # tree.append(left_branch)
 
 
 def draw():
@@ -70,13 +66,18 @@ def draw():
         g = randint(150, 255)
         r = randint(0, g - 20)
         b = randint(0, g - 20)
-        if len(tree) < 100:
+        if len(tree) < 300:
             tree_size = len(tree)
             for i in range(0, tree_size):
-                left_child = tree[i].left_child()
-                tree.append(left_child)
-                right_child = tree[i].right_child()
-                tree.append(right_child)
+                if randint(0, 10) < 2:
+                    left_child = tree[i].left_child()
+                    tree.append(left_child)
+                if randint(0, 10) < 2:
+                    right_child = tree[i].right_child()
+                    tree.append(right_child)
+        else:
+            tree.clear()
+            setup()
 
     for branch in tree:
         branch.draw(r, g, b)
