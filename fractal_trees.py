@@ -54,7 +54,7 @@ dice = 0
 
 
 def setup():
-    size(600, 600)
+    size(1440, 900)
     root = branch(width / 2, height, width / 2, height - 200)
     tree.append(root)
 
