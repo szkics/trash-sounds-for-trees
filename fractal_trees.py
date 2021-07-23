@@ -1,5 +1,5 @@
 from p5 import *
-from random import randint
+from random import randint, uniform
 
 
 class branch:
@@ -11,14 +11,22 @@ class branch:
 
     def draw(self, r, g, b):
         stroke(r, g, b)
-        stroke_weight(4)
+        stroke_weight(2)
         line(self.x_start, self.y_start, self.x_end, self.y_end)
+
+    def wind(self):
+        randomX = uniform(-1, 1)
+        randomY = uniform(-1, 1)
+        self.x_start += randomX
+        self.y_start += randomY
+        self.x_end += randomX
+        self.y_end += randomY
 
     def right_child(self):
         direction_x = self.x_end - self.x_start
         direction_y = self.y_end - self.y_start
         new_branch = Vector(direction_x, direction_y)
-        new_branch.rotate(PI / 4)
+        new_branch.rotate(PI / randint(4, 8))
         new_branch = new_branch * 0.67
         new_x = self.x_end + new_branch.x
         new_y = self.y_end + new_branch.y
@@ -29,7 +37,7 @@ class branch:
         direction_x = self.x_end - self.x_start
         direction_y = self.y_end - self.y_start
         new_branch = Vector(direction_x, direction_y)
-        new_branch.rotate(-PI / 4)
+        new_branch.rotate(-PI / randint(4, 8))
         new_branch = new_branch * 0.67
         new_x = self.x_end + new_branch.x
         new_y = self.y_end + new_branch.y
@@ -42,20 +50,21 @@ tree = []
 r = 0
 g = 255
 b = 255
+dice = 0
 
 
 def setup():
     size(600, 600)
     root = branch(width / 2, height, width / 2, height - 200)
     tree.append(root)
-    right_branch = root.right_child()
-    tree.append(right_branch)
-    left_branch = root.left_child()
-    tree.append(left_branch)
+    # right_branch = root.right_child()
+    # tree.append(right_branch)
+    # left_branch = root.left_child()
+    # tree.append(left_branch)
 
 
 def draw():
-    background(51)
+    background(24)
 
     if mouse_is_pressed:
         g = randint(150, 255)
@@ -71,6 +80,7 @@ def draw():
 
     for branch in tree:
         branch.draw(r, g, b)
+        # branch.wind()
 
 
 run()
