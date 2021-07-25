@@ -1,6 +1,9 @@
 from p5 import *
 from random import randint, uniform
-
+import time
+import board
+import busio
+import adafruit_mpr121
 
 class branch:
     def __init__(self, x_start, y_start, x_end, y_end):
@@ -52,6 +55,13 @@ g = 255
 b = 255
 dice = 0
 
+i2c = busio.I2C(board.SCL, board.SDA)
+mpr121 = adafruit_mpr121.MPR121(i2c)
+
+zero_has_changed = 1
+one_has_changed = 1
+two_has_changed = 1
+three_has_changed = 1
 
 def setup():
     size(1440, 900)
@@ -62,7 +72,36 @@ def setup():
 def draw():
     background(24)
 
-    if mouse_is_pressed:
+    if (mpr121[0].value and zero_has_changed == 1) or
+        (mpr121[1].value and one_has_changed == 1) or
+        (mpr121[2].value and two_has_changed == 1) or
+        (mpr121[3].value and three_has_changed == 1):
+
+        if mpr121[0].value and zero_has_changed == 1:
+            print "0"
+            zero_has_changed = 0
+            one_has_changed = 1
+            two_has_changed = 1
+            three_has_changed = 1
+        if mpr121[1].value and one_has_changed == 1:
+            print "1"
+            zero_has_changed = 1
+            one_has_changed = 0
+            two_has_changed = 1
+            three_has_changed = 1
+        if mpr121[2].value and two_has_changed == 1:
+            print "2"
+            zero_has_changed = 1
+            one_has_changed = 1
+            two_has_changed = 0
+            three_has_changed = 1
+        if mpr121[3].value and three_has_changed == 1:
+            print "3"
+            zero_has_changed = 1
+            one_has_changed = 1
+            two_has_changed = 1
+            three_has_changed = 0
+
         g = randint(150, 255)
         r = randint(0, g - 20)
         b = randint(0, g - 20)
@@ -82,6 +121,4 @@ def draw():
     for branch in tree:
         branch.draw(r, g, b)
         # branch.wind()
-
-
 run()
