@@ -62,45 +62,21 @@ zero_has_changed = 1
 one_has_changed = 1
 two_has_changed = 1
 three_has_changed = 1
+print("init")
 
 def setup():
+    print("setup")
     size(1440, 900)
     root = branch(width / 2, height, width / 2, height - 200)
     tree.append(root)
+    i2c = busio.I2C(board.SCL, board.SDA)
+    mpr121 = adafruit_mpr121.MPR121(i2c)
 
 
 def draw():
+    #time.sleep(0.1)  # Small delay to keep from spamming output messages.
     background(24)
-
-    if (mpr121[0].value and zero_has_changed == 1) or
-        (mpr121[1].value and one_has_changed == 1) or
-        (mpr121[2].value and two_has_changed == 1) or
-        (mpr121[3].value and three_has_changed == 1):
-
-        if mpr121[0].value and zero_has_changed == 1:
-            print "0"
-            zero_has_changed = 0
-            one_has_changed = 1
-            two_has_changed = 1
-            three_has_changed = 1
-        if mpr121[1].value and one_has_changed == 1:
-            print "1"
-            zero_has_changed = 1
-            one_has_changed = 0
-            two_has_changed = 1
-            three_has_changed = 1
-        if mpr121[2].value and two_has_changed == 1:
-            print "2"
-            zero_has_changed = 1
-            one_has_changed = 1
-            two_has_changed = 0
-            three_has_changed = 1
-        if mpr121[3].value and three_has_changed == 1:
-            print "3"
-            zero_has_changed = 1
-            one_has_changed = 1
-            two_has_changed = 1
-            three_has_changed = 0
+    if (mpr121[0].value or mpr121[1].value or mpr121[2].value or mpr121[3].value):
 
         g = randint(150, 255)
         r = randint(0, g - 20)
@@ -121,4 +97,4 @@ def draw():
     for branch in tree:
         branch.draw(r, g, b)
         # branch.wind()
-run()
+run(frame_rate=10)
